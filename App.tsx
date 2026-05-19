@@ -3,7 +3,7 @@ import "./App.css";
 import { OptionChips } from "./components/OptionChips";
 import { ResultsPanel } from "./components/ResultsPanel";
 import { Toast } from "./components/Toast";
-import { synthesizeSpeechMp3 } from "./services/openaiTts";
+import { analyzeProductWithVision } from "./services/openai";
 import { synthesizeSpeechMp3 } from "./services/openaiTts";
 import type {
   PlatformId,
