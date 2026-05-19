@@ -1049,3 +1049,4 @@ const data = await analyzeProductVision(imageDataUrl, options);
     </div>
   );
 }
+fix import name
