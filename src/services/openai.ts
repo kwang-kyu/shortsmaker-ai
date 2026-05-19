@@ -96,3 +96,4 @@ export async function analyzeProductWithVision(
 
   return parseResult(data);
 }
+// fix openai export
