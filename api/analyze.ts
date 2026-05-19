@@ -5,10 +5,12 @@ const MODEL = "gpt-4o-mini";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "POST 요청만 허용됩니다." });
+    return res.status(405).json({
+      error: "POST 요청만 허용됩니다.",
+    });
   }
 
-  const apiKey = process.env.VITE_OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
 
   if (!apiKey) {
     return res.status(500).json({
@@ -19,7 +21,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { imageDataUrl, options } = req.body ?? {};
 
   if (!imageDataUrl || typeof imageDataUrl !== "string") {
-    return res.status(400).json({ error: "제품 이미지가 없습니다." });
+    return res.status(400).json({
+      error: "제품 이미지가 없습니다.",
+    });
   }
 
   const duration = options?.duration ?? 15;
@@ -76,7 +80,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey.trim()}`,
       },
       body: JSON.stringify({
         model: MODEL,
