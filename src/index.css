@@ -1,0 +1,205 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0c0f;
+  --surface: #14151b;
+  --surface-2: #1c1d26;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f4f4f8;
+  --muted: #9b9bb0;
+  --accent: #7c5cff;
+  --accent-2: #ff5c8a;
+  --success: #3dd6c6;
+  --radius: 14px;
+  --font: "Noto Sans KR", system-ui, -apple-system, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--font);
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(124, 92, 255, 0.18), transparent),
+    radial-gradient(900px 500px at 100% 0%, rgba(255, 92, 138, 0.12), transparent),
+    var(--bg);
+  color: var(--text);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+.guide-card {
+  width: min(100%, 1120px);
+  margin: 28px auto 28px;
+  padding: 24px 26px;
+  border: 1px solid rgba(124, 92, 255, 0.35);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(124, 92, 255, 0.16), rgba(255, 92, 138, 0.08)),
+    rgba(20, 21, 27, 0.86);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+}
+
+.guide-card__head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.guide-card__badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  padding: 6px 11px;
+  border: 1px solid rgba(61, 214, 198, 0.35);
+  border-radius: 999px;
+  color: var(--success);
+  background: rgba(61, 214, 198, 0.08);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.guide-card__title {
+  margin: 0;
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+
+.guide-card__list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 22px;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.65;
+  font-weight: 700;
+}
+
+.guide-card__list li::marker {
+  color: var(--accent);
+  font-weight: 900;
+}
+
+.guide-card__note {
+  margin: 18px 0 0;
+  padding: 13px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: #d7d7e8;
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+@media (max-width: 760px) {
+  .guide-card {
+    margin: 22px auto;
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .guide-card__title {
+    font-size: 19px;
+  }
+
+  .guide-card__list {
+    font-size: 14px;
+  }
+}
+.guide-card__manual {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7c5cff, #e85d9e);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(124, 92, 255, 0.28);
+}
+
+.guide-card__manual:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+.guide-card__sample {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  margin-left: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(61, 214, 198, 0.35);
+  color: #3dd6c6;
+  background: rgba(61, 214, 198, 0.08);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.guide-card__sample:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+.ai-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 220px;
+  padding: 2rem 1.25rem;
+  text-align: center;
+  border: 1px dashed rgba(124, 92, 255, 0.35);
+  border-radius: 16px;
+  background: rgba(124, 92, 255, 0.08);
+}
+
+.ai-loading__spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid rgba(255, 255, 255, 0.16);
+  border-top-color: #7c5cff;
+  border-radius: 50%;
+  animation: aiSpin 0.9s linear infinite;
+}
+
+.ai-loading__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.ai-loading__text {
+  margin: 0;
+  max-width: 360px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #c9c9dc;
+}
+
+@keyframes aiSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
