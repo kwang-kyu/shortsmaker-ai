@@ -96,6 +96,6 @@ export async function analyzeProductWithVision(
 
   return parseResult(data);
 }
-// fix openai export
+// fix openai export1
 export const analyzeProductVision = analyzeProductWithVision;
 
