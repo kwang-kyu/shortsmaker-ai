@@ -3,7 +3,7 @@ import "./App.css";
 import { OptionChips } from "./components/OptionChips";
 import { ResultsPanel } from "./components/ResultsPanel";
 import { Toast } from "./components/Toast";
-import { analyzeProductWithVision } from "./services/openai";
+import { analyzeProductVision } from "./services/openai";
 import { synthesizeSpeechMp3 } from "./services/openaiTts";
 import type {
   PlatformId,
@@ -230,7 +230,7 @@ export default function App() {
 
     try {
       const imageDataUrl = await fileToDataUrl(file);
-      const data = await analyzeProductWithVision(imageDataUrl, options);
+const data = await analyzeProductVision(imageDataUrl, options);
 
       const completeAudio = new Audio(
         "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
