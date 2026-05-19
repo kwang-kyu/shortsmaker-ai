@@ -1,121 +1,32 @@
-import type {
-  GenerationOptions,
-  SceneTimelineItem,
-  ShortsAdResult,
-} from "../types";
+import type { ShortsDuration } from "../types";
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+const API_URL = "/api/speech";
 
-function parseSceneTimeline(raw: unknown): SceneTimelineItem[] {
-  if (!Array.isArray(raw) || raw.length === 0) {
-    throw new Error("sceneTimeline이 비어 있거나 올바른 배열이 아닙니다.");
-  }
-
-  return raw.map((item, index) => {
-    if (!isRecord(item)) {
-      throw new Error(`sceneTimeline[${index}] 형식이 올바르지 않습니다.`);
-    }
-
-    const time = typeof item.time === "string" ? item.time : "";
-    const visual = typeof item.visual === "string" ? item.visual : "";
-    const caption = typeof item.caption === "string" ? item.caption : "";
-    const voice = typeof item.voice === "string" ? item.voice : "";
-
-    if (!time || !visual) {
-      throw new Error(`sceneTimeline[${index}]에 필수 필드가 없습니다.`);
-    }
-
-    return {
-      time,
-      visual,
-      caption,
-      voice,
-    };
-  });
-}
-
-function parseShortsAdResult(raw: unknown): ShortsAdResult {
-  if (!isRecord(raw)) {
-    throw new Error("API 응답이 JSON 객체가 아닙니다.");
-  }
-
-  const productSummary =
-    typeof raw.productSummary === "string"
-      ? raw.productSummary
-      : "";
-
-  const hook =
-    typeof raw.hook === "string"
-      ? raw.hook
-      : "";
-
-  const voiceScript =
-    typeof raw.voiceScript === "string"
-      ? raw.voiceScript
-      : "";
-
-  const captionScript =
-    typeof raw.captionScript === "string"
-      ? raw.captionScript
-      : "";
-
-  const videoPrompt =
-    typeof raw.videoPrompt === "string"
-      ? raw.videoPrompt
-      : "";
-
-  const sceneTimeline = parseSceneTimeline(raw.sceneTimeline);
-
-  const apiPayload = isRecord(raw.apiPayload)
-    ? raw.apiPayload
-    : {};
-
-  return {
-    productSummary,
-    hook,
-    voiceScript,
-    captionScript,
-    sceneTimeline,
-    videoPrompt,
-    apiPayload,
-  };
-}
-
-export async function analyzeProductWithVision(
-  imageDataUrl: string,
-  options: GenerationOptions,
-): Promise<ShortsAdResult> {
+export async function synthesizeSpeechMp3(
+  input: string,
+  durationSec: ShortsDuration,
+): Promise<Blob> {
   let response: Response;
 
   try {
-    response = await fetch("/api/analyze", {
+    response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        imageDataUrl,
-        options,
+        input,
+        durationSec,
       }),
     });
   } catch {
-    throw new Error("서버 연결에 실패했습니다.");
+    throw new Error("서버 연결 실패");
   }
-
-  const data: unknown = await response.json();
 
   if (!response.ok) {
-    if (
-      isRecord(data) &&
-      typeof data.error === "string"
-    ) {
-      throw new Error(data.error);
-    }
-
-    throw new Error("AI 분석에 실패했습니다.");
+    const text = await response.text();
+    throw new Error(text || "TTS 생성 실패");
   }
 
-  return parseShortsAdResult(data);
+  return response.blob();
 }
