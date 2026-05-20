@@ -58,14 +58,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 - 플랫폼: ${platform}
 - 톤: ${tone}
 - 생성 유형: ${generationType}
+- 영상 길이에 맞게 충분히 길고 자연스럽게 작성
+- 실제 쇼츠 광고처럼 말투를 생생하게 작성
+- 첫 문장은 시선을 끄는 강한 후킹으로 시작
+- 제품 장점을 구체적으로 설명
+- 단순 나열하지 말고 실제 사용 상황처럼 작성
+- 음성 대본은 최소 4~6문장 이상 작성
+- 말하듯 자연스럽게 작성
+- 광고 같지만 부담스럽지 않게 작성
+- 캡컷 자막은 짧고 강하게 줄바꿈 형태로 작성
 - 한국어로 작성
-- 과장 광고 표현은 피하고 자연스럽게 작성
+- JSON 외 문장은 절대 출력 금지
 
 반환 JSON 형식:
 {
   "productSummary": "제품 분석 요약",
-  "hook": "오프닝 훅",
-  "voiceScript": "음성 대본",
+  "hook": "3초 안에 시선을 끌 수 있는 강한 광고 후킹 문구",
+  "voiceScript": "실제 쇼츠 광고처럼 자연스럽고 생생한 15초 음성 대본",
   "captionScript": "캡컷용 화면 자막",
   "sceneTimeline": [
     {
