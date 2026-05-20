@@ -29,7 +29,7 @@ import {
 } from "./utils/resultText";
 
 const TOAST_MS = 2200;
-
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCESS_CODES: Record<
   string,
   {
@@ -202,11 +202,16 @@ export default function App() {
     [showToast],
   );
 
-  const onFiles = useCallback(
+    const onFiles = useCallback(
     (list: FileList | null) => {
       const next = list?.[0];
 
       if (!next || !next.type.startsWith("image/")) return;
+
+      if (next.size > MAX_IMAGE_SIZE) {
+        setError("이미지 용량은 5MB 이하로 업로드해 주세요.");
+        return;
+      }
 
       setFile(next);
       setPreviewUrl((prev) => {
@@ -218,7 +223,7 @@ export default function App() {
     },
     [clearOutput],
   );
-
+  
   const onGenerate = useCallback(async () => {
     if (!file || isLoading || remainingCount <= 0) return;
 
