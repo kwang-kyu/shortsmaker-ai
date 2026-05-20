@@ -1,5 +1,20 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
+function safeJsonParse(text: string) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+
+    try {
+      return JSON.parse(match[0]);
+    } catch {
+      return null;
+    }
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -36,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const prompt = `
 너는 숏폼 광고기획 전문가다.
 
-제품 이미지를 분석해서 아래 형식의 JSON만 반환해라.
+제품 이미지를 분석해서 JSON 형식으로만 반환해라.
 
 조건:
 - 영상 길이: ${duration}초
@@ -45,7 +60,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 - 생성 유형: ${generationType}
 - 한국어로 작성
 - 과장 광고 표현은 피하고 자연스럽게 작성
-- JSON 외의 설명 문장은 절대 넣지 마라
 
 반환 JSON 형식:
 {
@@ -114,12 +128,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             ],
           },
         ],
+        text: {
+          format: {
+            type: "json_object",
+          },
+        },
       }),
     });
 
     const responseData = await openaiResponse.json();
 
     if (!openaiResponse.ok) {
+      console.error("OPENAI_ERROR:", responseData);
+
       return res.status(openaiResponse.status).json({
         error: responseData?.error?.message || "OpenAI API 호출 실패",
       });
@@ -131,6 +152,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       "";
 
     if (!outputText) {
+      console.error("EMPTY_AI_RESPONSE:", responseData);
+
       return res.status(500).json({
         error: "AI 응답이 비어 있습니다.",
       });
@@ -141,7 +164,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .replace(/```/g, "")
       .trim();
 
-    const parsed = JSON.parse(cleaned);
+    const parsed = safeJsonParse(cleaned);
+
+    if (!parsed) {
+      console.error("JSON_PARSE_FAILED:", cleaned);
+
+      return res.status(500).json({
+        error: "AI 응답을 JSON으로 변환하지 못했습니다.",
+        raw: cleaned,
+      });
+    }
 
     return res.status(200).json(parsed);
   } catch (error) {
