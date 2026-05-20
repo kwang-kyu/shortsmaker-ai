@@ -8,15 +8,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const apiKey = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
+    const apiKey = process.env.OPENAI_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "서버에 OpenAI API 키가 설정되어 있지 않습니다.",
+        error: "서버에 OPENAI_API_KEY가 설정되어 있지 않습니다.",
       });
     }
 
-    const { imageDataUrl, options } = req.body;
+    const body =
+      typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
+
+    const imageDataUrl = body.imageDataUrl || body.image || body.imageUrl;
+    const options = body.options || {};
 
     if (!imageDataUrl) {
       return res.status(400).json({
@@ -143,6 +147,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "알 수 없는 서버 오류";
+
+    console.error("ANALYZE_API_ERROR:", message);
 
     return res.status(500).json({
       error: message,
