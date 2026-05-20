@@ -14,10 +14,15 @@ export interface SceneTimelineItem {
 export interface ShortsAdResult {
   productSummary: string;
   hook: string;
+  hookOptions?: string[];
   voiceScript: string;
   captionScript: string;
   sceneTimeline: SceneTimelineItem[];
   videoPrompt: string;
+  detailPageCopy?: string;
+  thumbnailCopy?: string | string[];
+  snsPostCopy?: string;
+  hashtags?: string[];
   apiPayload: Record<string, unknown>;
 }
 
