@@ -234,25 +234,25 @@ export function ResultsPanel({
           <ResultCard title={labels.hook} copyText={data.hook} onCopy={onCopy}>
             <p className="result-text result-text--hook">{data.hook}</p>
           </ResultCard>
-      {data.hookOptions?.length ? (
-  <ResultCard
-    title="🔥 추천 후킹 5개"
-    copyText={data.hookOptions.join("\n")}
-    onCopy={onCopy}
-  >
-    <div className="timeline">
-      {data.hookOptions.map((hook, index) => (
-        <div key={index} className="timeline__item">
-          <div className="timeline__body">
-            <p className="result-text">
-              <strong>{index + 1}.</strong> {hook}
-            </p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </ResultCard>
-) : null}    
+                {data.hookOptions?.length ? (
+            <ResultCard
+              title="🔥 추천 후킹 5개"
+              copyText={data.hookOptions.join("\n")}
+              onCopy={onCopy}
+            >
+              <div className="timeline">
+                {data.hookOptions.map((hook, index) => (
+                  <div key={index} className="timeline__item">
+                    <div className="timeline__body">
+                      <p className="result-text">
+                        <strong>{index + 1}.</strong> {hook}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ResultCard>
+          ) : null}    
         </>
       ) : null}
 
